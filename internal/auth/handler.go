@@ -6,6 +6,7 @@ import (
 	"link-cutter/configs"
 	"link-cutter/pkg/response"
 	"net/http"
+	"net/mail"
 )
 
 type AuthHandlerDeps struct {
@@ -35,6 +36,12 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 
 		if payload.Email == "" {
 			response.JSON(w, "Email required", http.StatusBadRequest)
+			return
+		}
+
+		_, err = mail.ParseAddress(payload.Email)
+		if err != nil {
+			response.JSON(w, "Wrong email", http.StatusBadRequest)
 			return
 		}
 
