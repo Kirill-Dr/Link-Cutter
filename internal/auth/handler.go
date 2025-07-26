@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"encoding/json"
 	"fmt"
 	"link-cutter/configs"
+	"link-cutter/pkg/response"
 	"net/http"
 )
 
@@ -27,12 +27,10 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(handler.Config.Auth.Secret)
 		fmt.Println("Login")
-		res := LoginResponse{
+		data := LoginResponse{
 			Token: "123",
 		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		json.NewEncoder(w).Encode(res)
+		response.JSON(w, data, http.StatusOK)
 	}
 }
 
