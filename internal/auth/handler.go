@@ -30,6 +30,17 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 		err := json.NewDecoder(req.Body).Decode(&payload)
 		if err != nil {
 			response.JSON(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if payload.Email == "" {
+			response.JSON(w, "Email required", http.StatusBadRequest)
+			return
+		}
+
+		if payload.Password == "" {
+			response.JSON(w, "Password required", http.StatusBadRequest)
+			return
 		}
 
 		data := LoginResponse{
