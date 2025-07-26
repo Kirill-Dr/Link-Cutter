@@ -6,6 +6,8 @@ import (
 )
 
 func HandleBody[T any](w *http.ResponseWriter, req *http.Request) (*T, error) {
+	defer req.Body.Close()
+
 	body, err := Decode[T](req.Body)
 	if err != nil {
 		response.JSON(*w, err.Error(), http.StatusBadRequest)
