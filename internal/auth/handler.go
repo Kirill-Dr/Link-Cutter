@@ -6,7 +6,8 @@ import (
 	"link-cutter/configs"
 	"link-cutter/pkg/response"
 	"net/http"
-	"net/mail"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type AuthHandlerDeps struct {
@@ -34,19 +35,10 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 			return
 		}
 
-		if payload.Email == "" {
-			response.JSON(w, "Email required", http.StatusBadRequest)
-			return
-		}
-
-		_, err = mail.ParseAddress(payload.Email)
+		validate := validator.New()
+		err = validate.Struct(payload)
 		if err != nil {
-			response.JSON(w, "Wrong email", http.StatusBadRequest)
-			return
-		}
-
-		if payload.Password == "" {
-			response.JSON(w, "Password required", http.StatusBadRequest)
+			response.JSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
