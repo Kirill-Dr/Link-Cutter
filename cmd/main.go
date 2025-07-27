@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"link-cutter/configs"
 	"link-cutter/internal/auth"
+	"link-cutter/pkg/db"
 	"net/http"
 )
 
 func main() {
 	config := configs.LoadConfig()
+	_ = db.NewDB(config)
 	router := http.NewServeMux()
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
 		Config: config,
