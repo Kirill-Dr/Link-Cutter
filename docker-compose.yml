@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: postgres_go
-    image: postgres:16.4
+    image: postgres
     env_file:
       - .env
     environment:
